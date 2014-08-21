@@ -1,10 +1,6 @@
+<?import javafx.scene.control.*?>
 <?import javafx.scene.control.cell.PropertyValueFactory?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.control.Button?>
-<?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.*?>
 
 <VBox fx:controller="amuse.controllers.ControllerMain"
           xmlns:fx="http://javafx.com/fxml">
@@ -30,11 +26,9 @@
     </TableView>
 
     <HBox>
-         <padding>
-             <Insets top="5"/>
-         </padding>
-
         <Button fx:id="btnDownloadSelected" text="Download Selected" HBox.hgrow="ALWAYS"/>
         <Button fx:id="btnDownloadAll" text="Download All" HBox.hgrow="ALWAYS"/>
     </HBox>
+
+    <fx:include source="player.fxml" fx:id="player"/>
 </VBox>

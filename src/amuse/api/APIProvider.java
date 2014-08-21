@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-public class APIProvider {
+public final class APIProvider {
 
     private final String SCHEME = "https";
     private final String HOST = "api.vk.com";

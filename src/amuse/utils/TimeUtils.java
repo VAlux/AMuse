@@ -1,13 +1,13 @@
 package amuse.utils;
 
 
-public class TimeUtils {
+public final class TimeUtils {
     /**
      * Converts the time, given in seconds, to the readable String, like {hh : mm : ss}
      * @param duration source duration in seconds.
      * @return formatted time as string.
      */
-    public static String formatTime(long duration) {
+    public static String formatTime(final long duration) {
         int seconds = (int) (duration % 60);
         int minutes = (int) ((duration / 60) % 60);
         int hours   = (int) ((duration / (60 * 60)) % 24);

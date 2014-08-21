@@ -14,7 +14,7 @@ import java.nio.channels.ReadableByteChannel;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-public class DownloadTask extends Task<Void> {
+public final class DownloadTask extends Task<Void> {
 
     private Song song;
     private int songSize;
@@ -65,6 +65,7 @@ public class DownloadTask extends Task<Void> {
         this.updateProgress(progress, songSize);
     }
 
+///FXML binding needs:
     public String getArtist() {
         return artist.get();
     }
@@ -75,5 +76,10 @@ public class DownloadTask extends Task<Void> {
 
     public String getDuration() {
         return duration.get();
+    }
+///
+
+    public Song getSong() {
+        return song;
     }
 }

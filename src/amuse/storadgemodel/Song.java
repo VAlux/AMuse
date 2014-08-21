@@ -3,7 +3,7 @@ package amuse.storadgemodel;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-public class Song {
+public final class Song {
 
     private String artist;
     private String title;

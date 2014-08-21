@@ -20,7 +20,7 @@ import java.util.ResourceBundle;
 
 public class ControllerAuth implements Initializable {
 
-    private final String OAuthURL = "https://oauth.vk.com/authorize?client_id=4130904&scope=audio&redirect_uri=https://oauth.vk.com/blank.html&display=page&v=5.0&response_type=token";
+    private final String OAuthURL = "https://oauth.vk.com/authorize?client_id=4130904&scope=audio,offline&redirect_uri=https://oauth.vk.com/blank.html&display=page&v=5.0&response_type=token";
     private Stage parentStage;
     @FXML private WebView webView;
 

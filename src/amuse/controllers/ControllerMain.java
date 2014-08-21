@@ -5,6 +5,8 @@ import amuse.download.DownloadManager;
 import amuse.download.DownloadTask;
 import amuse.storadgemodel.Song;
 import amuse.storadgemodel.SoundStorage;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -29,6 +31,7 @@ public class ControllerMain implements Initializable{
     @FXML private TableView<DownloadTask> twSongsList;
     @FXML private Button btnDownloadSelected;
     @FXML private Button btnDownloadAll;
+    @FXML private ControllerPlayer playerController;
 
     private SoundStorage storage;
     private DownloadManager downloadManager;
@@ -82,6 +85,13 @@ public class ControllerMain implements Initializable{
                         e.printStackTrace();
                     }
                 }
+            }
+        });
+
+        twSongsList.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<DownloadTask>() {
+            @Override
+            public void changed(ObservableValue<? extends DownloadTask> observableValue, DownloadTask task, DownloadTask task2) {
+                playerController.setSong(task2.getSong());
             }
         });
     }

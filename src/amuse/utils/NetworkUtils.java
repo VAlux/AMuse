@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class NetworkUtils {
+public final class NetworkUtils {
 
     public static int getContentSize(final URL url) throws IOException {
         HttpURLConnection connection;
