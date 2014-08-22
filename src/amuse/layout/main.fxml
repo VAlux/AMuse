@@ -3,7 +3,8 @@
 <?import javafx.scene.layout.*?>
 
 <VBox fx:controller="amuse.controllers.ControllerMain"
-          xmlns:fx="http://javafx.com/fxml">
+          xmlns:fx="http://javafx.com/fxml"
+          styleClass="root">
 
     <TableView fx:id="twSongsList" VBox.vgrow="ALWAYS">
         <columns>

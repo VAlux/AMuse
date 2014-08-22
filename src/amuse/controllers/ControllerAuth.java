@@ -52,7 +52,7 @@ public class ControllerAuth implements Initializable {
                                 APIProvider.getInstance().init(paramsMap.get("user_id"), paramsMap.get("access_token"));
                                 Parent root  = FXMLLoader.load(getClass().getClassLoader().getResource("amuse/layout/main.fxml"));
                                 Scene mainScene = new Scene(root, 600, 500);
-                                mainScene.getStylesheets().add("/amuse/styles/theme.css");
+                                mainScene.getStylesheets().add("/amuse/styles/theme2.css");
                                 parentStage.setScene(mainScene);
                                 parentStage.setTitle("AMuse");
                                 // reset the local reference to avoid another responses handling(may cause multiple parentStage reinitialization).
