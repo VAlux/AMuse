@@ -13,6 +13,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.ProgressBarTableCell;
@@ -28,10 +29,16 @@ import java.util.ResourceBundle;
 
 public class ControllerMain implements Initializable{
 
-    @FXML private TableView<DownloadTask> twSongsList;
-    @FXML private Button btnDownloadSelected;
-    @FXML private Button btnDownloadAll;
-    @FXML private ControllerPlayer playerController;
+    @FXML
+    private TableView<DownloadTask> twSongsList;
+    @FXML
+    private Button btnDownloadSelected;
+    @FXML
+    private Button btnDownloadAll;
+    @FXML
+    private ControllerPlayer playerController;
+    @FXML
+    private Label lblSongName;
 
     private SoundStorage storage;
     private DownloadManager downloadManager;
@@ -92,6 +99,7 @@ public class ControllerMain implements Initializable{
             @Override
             public void changed(ObservableValue<? extends DownloadTask> observableValue, DownloadTask task, DownloadTask task2) {
                 playerController.setSong(task2.getSong());
+                lblSongName.setText(task2.getArtist() + " :: " + task2.getName());
             }
         });
     }

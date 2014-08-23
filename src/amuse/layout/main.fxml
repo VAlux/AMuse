@@ -2,9 +2,9 @@
 <?import javafx.scene.control.cell.PropertyValueFactory?>
 <?import javafx.scene.layout.*?>
 
+<?import javafx.geometry.Insets?>
 <VBox fx:controller="amuse.controllers.ControllerMain"
-          xmlns:fx="http://javafx.com/fxml"
-          styleClass="root">
+          xmlns:fx="http://javafx.com/fxml">
 
     <TableView fx:id="twSongsList" VBox.vgrow="ALWAYS">
         <columns>
@@ -26,9 +26,14 @@
         </columns>
     </TableView>
 
-    <HBox>
-        <Button fx:id="btnDownloadSelected" text="Download Selected" HBox.hgrow="ALWAYS"/>
-        <Button fx:id="btnDownloadAll" text="Download All" HBox.hgrow="ALWAYS"/>
+    <HBox spacing="5">
+        <padding>
+            <Insets top="5" left="5" right="5"/>
+        </padding>
+
+        <Button fx:id="btnDownloadSelected" text="Download Selected" HBox.hgrow="ALWAYS" styleClass="dark-blue-button"/>
+        <Button fx:id="btnDownloadAll" text="Download All" HBox.hgrow="ALWAYS" styleClass="dark-blue-button"/>
+        <Label fx:id="lblSongName" styleClass="song-label"/>
     </HBox>
 
     <fx:include source="player.fxml" fx:id="player"/>
