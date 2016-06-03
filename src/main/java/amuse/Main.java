@@ -11,8 +11,8 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("amuse/layout/auth.fxml"));
-        Parent root = (Parent) loader.load();
+        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("layout/auth.fxml"));
+        Parent root = loader.load();
         ControllerAuth authController = loader.getController();
         authController.setParentStage(primaryStage);
         primaryStage.setTitle("Authorization");

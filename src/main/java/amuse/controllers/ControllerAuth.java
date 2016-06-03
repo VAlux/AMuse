@@ -28,11 +28,10 @@ public class ControllerAuth implements Initializable {
         this.parentStage = parentStage;
     }
 
-    @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         webView.getEngine().load(OAuthURL);
         webView.getEngine().setOnStatusChanged(new EventHandler<WebEvent<String>>() {
-            @Override
+
             public void handle(WebEvent<String> stringWebEvent) {
                 if (stringWebEvent.getSource() instanceof WebEngine) {
                     WebEngine engine = (WebEngine) stringWebEvent.getSource();
@@ -42,6 +41,7 @@ public class ControllerAuth implements Initializable {
                             URL locURL = new URL(location);
                             String[] params = locURL.getRef().split("&");
                             Map<String, String> paramsMap = new HashMap<>();
+
                             for (String param : params) {
                                 String name = param.split("=")[0];
                                 String value = param.split("=")[1];
@@ -50,9 +50,9 @@ public class ControllerAuth implements Initializable {
                             if (parentStage != null){
                                 // creates instance of api provider and prepare it for queries.
                                 APIProvider.getInstance().init(paramsMap.get("user_id"), paramsMap.get("access_token"));
-                                Parent root  = FXMLLoader.load(getClass().getClassLoader().getResource("amuse/layout/main.fxml"));
+                                Parent root  = FXMLLoader.load(getClass().getClassLoader().getResource("layout/main.fxml"));
                                 Scene mainScene = new Scene(root, 600, 500);
-                                mainScene.getStylesheets().add("/amuse/styles/theme2.css");
+                                mainScene.getStylesheets().add("styles/theme2.css");
                                 parentStage.setScene(mainScene);
                                 parentStage.setTitle("AMuse");
                                 // reset the local reference to avoid another responses handling(may cause multiple parentStage reinitialization).

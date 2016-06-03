@@ -3,13 +3,8 @@ package amuse.controllers;
 import amuse.api.APIProvider;
 import amuse.download.DownloadManager;
 import amuse.download.DownloadTask;
-import amuse.storadgemodel.Song;
 import amuse.storadgemodel.SoundStorage;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -26,6 +21,7 @@ import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 
 public class ControllerMain implements Initializable{
 
@@ -40,18 +36,18 @@ public class ControllerMain implements Initializable{
     @FXML
     private Label lblSongName;
 
-    private SoundStorage storage;
     private DownloadManager downloadManager;
     private ObservableList<DownloadTask> downloadTasks;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        storage = new SoundStorage();
+        final SoundStorage storage = new SoundStorage();
         downloadManager = new DownloadManager();
         downloadTasks = twSongsList.getItems();
 
         try {
             HttpEntity response = APIProvider.getInstance().executeQuery();
+            assert response != null;
             try (InputStream stream = response.getContent()){
                 storage.populate(IOUtils.toString(stream));
             }
@@ -60,12 +56,10 @@ public class ControllerMain implements Initializable{
             return;
         }
 
-        for (Song song : storage.getSongs()) {
-            downloadTasks.add(new DownloadTask(song));
-        }
+        downloadTasks.addAll(storage.getSongs().stream().map(DownloadTask::new).collect(Collectors.toList()));
 
         TableColumn<DownloadTask, Double> progressColumn = new TableColumn<>("Progress");
-        progressColumn.setCellValueFactory(new PropertyValueFactory<DownloadTask, Double>("progress"));
+        progressColumn.setCellValueFactory(new PropertyValueFactory<>("progress"));
         progressColumn.setCellFactory(ProgressBarTableCell.<DownloadTask> forTableColumn());
         twSongsList.getColumns().add(progressColumn);
 
@@ -73,34 +67,24 @@ public class ControllerMain implements Initializable{
     }
 
     private void addActionListeners(){
-        btnDownloadSelected.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                downloadManager.downloadSong(downloadTasks.get(twSongsList.getSelectionModel().getSelectedIndex()));
-            }
-        });
+        btnDownloadSelected.setOnAction(actionEvent ->
+                downloadManager.downloadSong(downloadTasks.get(twSongsList.getSelectionModel().getSelectedIndex())));
 
-        btnDownloadAll.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                final long delay = 100L;
-                for (DownloadTask downloadTask : downloadTasks) {
-                    downloadManager.downloadSong(downloadTask);
-                    try {
-                        Thread.sleep(delay);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
+        btnDownloadAll.setOnAction(actionEvent -> {
+            final long delay = 100L;
+            for (DownloadTask downloadTask : downloadTasks) {
+                downloadManager.downloadSong(downloadTask);
+                try {
+                    Thread.sleep(delay);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
             }
         });
 
-        twSongsList.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<DownloadTask>() {
-            @Override
-            public void changed(ObservableValue<? extends DownloadTask> observableValue, DownloadTask task, DownloadTask task2) {
-                playerController.setSong(task2.getSong());
-                lblSongName.setText(task2.getArtist() + " :: " + task2.getName());
-            }
+        twSongsList.getSelectionModel().selectedItemProperty().addListener((observableValue, task, task2) -> {
+            playerController.setSong(task2.getSong());
+            lblSongName.setText(task2.getArtist() + " :: " + task2.getName());
         });
     }
 }

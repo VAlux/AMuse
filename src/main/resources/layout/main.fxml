@@ -1,0 +1,40 @@
+<?import javafx.scene.control.*?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.geometry.Insets?>
+<VBox fx:controller="amuse.controllers.ControllerMain"
+          xmlns:fx="http://javafx.com/fxml">
+
+    <TableView fx:id="twSongsList" VBox.vgrow="ALWAYS">
+        <columns>
+            <TableColumn fx:id="songName" text="Title">
+                <cellValueFactory>
+                    <PropertyValueFactory property="name"/>
+                </cellValueFactory>
+            </TableColumn>
+            <TableColumn fx:id="songArtist" text="Artist">
+                <cellValueFactory>
+                    <PropertyValueFactory property="artist"/>
+                </cellValueFactory>
+            </TableColumn>
+            <TableColumn fx:id="songDuration" text="Duration">
+                <cellValueFactory>
+                    <PropertyValueFactory property="duration"/>
+                </cellValueFactory>
+            </TableColumn>
+        </columns>
+    </TableView>
+
+    <HBox spacing="5">
+        <padding>
+            <Insets top="5" left="5" right="5"/>
+        </padding>
+
+        <Button fx:id="btnDownloadSelected" text="Download Selected" HBox.hgrow="ALWAYS" styleClass="dark-blue-button"/>
+        <Button fx:id="btnDownloadAll" text="Download All" HBox.hgrow="ALWAYS" styleClass="dark-blue-button"/>
+        <Label fx:id="lblSongName" styleClass="song-label"/>
+    </HBox>
+
+    <fx:include source="player.fxml" fx:id="player"/>
+</VBox>
