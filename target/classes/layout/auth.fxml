@@ -1,9 +1,0 @@
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.web.WebView?>
-<GridPane fx:controller="amuse.controllers.ControllerAuth"
-          xmlns:fx="http://javafx.com/fxml"
-          alignment="center"
-          hgap="10" vgap="10">
-
-    <WebView fx:id="webView" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
-</GridPane>
