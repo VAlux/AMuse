@@ -7,50 +7,55 @@ import org.json.simple.parser.ParseException;
 
 import java.net.MalformedURLException;
 import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
 
 public class SoundStorage {
-    ArrayList<Song> songs;
 
-    public SoundStorage() {
-        songs = new ArrayList<>();
+  private ArrayList<Song> songs;
+
+  public SoundStorage() {
+    songs = new ArrayList<>();
+  }
+
+  public void populate(String source) throws ExecutionException, InterruptedException, ParseException, MalformedURLException {
+    JSONArray rawList = parseSource(source);
+    for (Object elem : rawList) {
+      final JSONObject listEntry = (JSONObject) elem;
+
+      final String title = (String) listEntry.get("title");
+      final String artist = (String) listEntry.get("artist");
+      final String url = (String) listEntry.get("url");
+      final long duration = (long) listEntry.get("duration");
+
+      songs.add(new Song(title, artist, duration, url));
+    }
+  }
+
+  private JSONArray parseSource(String source) throws ParseException {
+    JSONParser parser = new JSONParser();
+    JSONArray rawList;
+    final JSONObject parsedSource = (JSONObject) parser.parse(source);
+    rawList = (JSONArray) parsedSource.get("response");
+    JSONObject listEntry;
+
+    if (rawList == null) {
+      listEntry = (JSONObject) parsedSource.get("error");
+      System.err.println(listEntry.get("error_msg"));
+      return new JSONArray(); // return empty array in case of error.
     }
 
-    public void populate(String source){
-        JSONParser parser = new JSONParser();
-        try {
-            JSONObject parsedSource = (JSONObject) parser.parse(source);
-            JSONArray rawList = (JSONArray) parsedSource.get("response");
-            JSONObject listEntry;
+    return rawList;
+  }
 
-            if(rawList == null){
-                listEntry = (JSONObject)parsedSource.get("error");
-                System.err.println(listEntry.get("error_msg"));
-                return;
-            }
-            for (Object elem : rawList) {
-                listEntry = (JSONObject) elem;
+  public void addSong(Song song) {
+    this.songs.add(song);
+  }
 
-                final String title = (String) listEntry.get("title");
-                final String artist = (String) listEntry.get("artist");
-                final String url = (String) listEntry.get("url");
-                final long duration = (long) listEntry.get("duration");
+  public Song getSong(int index) {
+    return this.songs.get(index);
+  }
 
-                songs.add(new Song(title, artist, duration, url));
-            }
-        } catch (ParseException | MalformedURLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void addSong(Song song) {
-        this.songs.add(song);
-    }
-
-    public Song getSong(int index) {
-        return this.songs.get(index);
-    }
-
-    public ArrayList<Song> getSongs() {
-        return songs;
-    }
+  public ArrayList<Song> getSongs() {
+    return songs;
+  }
 }

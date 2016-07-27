@@ -7,23 +7,25 @@ import java.util.concurrent.Executors;
 
 public class DownloadManager {
 
-    private Path saveFolder;
-    private ExecutorService downloadTasksExecutor;
+  private static final String DEFAULT_SAVE_FOLDER = System.getProperty("user.dir");
 
-    public DownloadManager() {
-        this.saveFolder = Paths.get(System.getProperty("user.dir"));
-        downloadTasksExecutor = Executors.newCachedThreadPool();
-    }
+  private Path saveFolder;
+  private ExecutorService downloadTasksExecutor;
 
-   public void downloadSong(final DownloadTask task){
-       downloadTasksExecutor.execute(task);
-    }
+  public DownloadManager() {
+    this.saveFolder = Paths.get(DEFAULT_SAVE_FOLDER);
+    downloadTasksExecutor = Executors.newCachedThreadPool();
+  }
 
-    public void setSaveFolder(final String saveFolder) {
-        this.saveFolder = Paths.get(saveFolder);
-    }
+  public void performDownload(final DownloadTask task) {
+    downloadTasksExecutor.execute(task);
+  }
 
-    public void cancelAll() {
-        downloadTasksExecutor.shutdownNow();
-    }
+  public void setSaveFolder(final String saveFolder) {
+    this.saveFolder = Paths.get(saveFolder);
+  }
+
+  public void cancelAll() {
+    downloadTasksExecutor.shutdownNow();
+  }
 }
