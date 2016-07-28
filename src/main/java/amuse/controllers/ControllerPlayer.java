@@ -48,13 +48,13 @@ public class ControllerPlayer implements Initializable {
     sldSongProgressSlider.setDisable(true);
   }
 
-  public void setSong(Song song) {
+  public void chooseSong(Song song) {
     this.selectedSong = song;
     lblCurrentTrackTime.setText(TimeUtils.formatTime(0L));
     lblTrackTotalTime.setText(TimeUtils.formatTime(selectedSong.getDuration()));
   }
 
-  private void setMedia(final Song song) {
+  private void insertSong(final Song song) {
     if (song == null)
       return;
 
@@ -72,9 +72,9 @@ public class ControllerPlayer implements Initializable {
   private void addActionListeners() {
     btnPlay.setOnAction(actionEvent -> {
       if (player == null ||
-              player.getStatus() != MediaPlayer.Status.PLAYING ||
-              player.getStatus() != MediaPlayer.Status.PAUSED) {
-        setMedia(selectedSong);
+          player.getStatus() != MediaPlayer.Status.PLAYING ||
+          player.getStatus() != MediaPlayer.Status.PAUSED) {
+        insertSong(selectedSong);
       } else if (isEndOfMedia) {
         player.seek(player.getStartTime());
         isEndOfMedia = false;

@@ -1,29 +1,32 @@
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.control.cell.PropertyValueFactory?>
 <?import javafx.scene.layout.*?>
 
-<?import javafx.geometry.Insets?>
 <VBox fx:controller="amuse.controllers.ControllerMain" xmlns:fx="http://javafx.com/fxml">
-
-    <TableView fx:id="twSongsList" VBox.vgrow="ALWAYS">
-        <columns>
-            <TableColumn fx:id="songName" text="Title">
-                <cellValueFactory>
-                    <PropertyValueFactory property="name"/>
-                </cellValueFactory>
-            </TableColumn>
-            <TableColumn fx:id="songArtist" text="Artist">
-                <cellValueFactory>
-                    <PropertyValueFactory property="artist"/>
-                </cellValueFactory>
-            </TableColumn>
-            <TableColumn fx:id="songDuration" text="Duration">
-                <cellValueFactory>
-                    <PropertyValueFactory property="duration"/>
-                </cellValueFactory>
-            </TableColumn>
-        </columns>
-    </TableView>
+    <Pagination fx:id="pgnPagination">
+        <fx:define>
+            <TableView fx:id="twSongsList" VBox.vgrow="ALWAYS">
+                <columns>
+                    <TableColumn fx:id="songName" text="Title">
+                        <cellValueFactory>
+                            <PropertyValueFactory property="name"/>
+                        </cellValueFactory>
+                    </TableColumn>
+                    <TableColumn fx:id="songArtist" text="Artist">
+                        <cellValueFactory>
+                            <PropertyValueFactory property="artist"/>
+                        </cellValueFactory>
+                    </TableColumn>
+                    <TableColumn fx:id="songDuration" text="Duration">
+                        <cellValueFactory>
+                            <PropertyValueFactory property="duration"/>
+                        </cellValueFactory>
+                    </TableColumn>
+                </columns>
+            </TableView>
+        </fx:define>
+    </Pagination>
 
     <HBox spacing="5">
         <padding>

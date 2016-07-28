@@ -4,12 +4,15 @@ import amuse.api.APIProvider;
 import amuse.download.DownloadManager;
 import amuse.download.DownloadTask;
 import amuse.storadgemodel.SoundStorage;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.ProgressBarTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.BorderPane;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpEntity;
 import org.json.simple.parser.ParseException;
@@ -21,12 +24,14 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
 public class ControllerMain implements Initializable {
 
+  private static final String TARGET_SAVE_FOLDER = "amuse_downloaded_songs";
   @FXML
   private TableView<DownloadTask> twSongsList;
   @FXML
@@ -34,14 +39,16 @@ public class ControllerMain implements Initializable {
   @FXML
   private Button btnDownloadAll;
   @FXML
-  private ControllerPlayer playerController;
-  @FXML
   private Label lblSongName;
+  @FXML
+  private Pagination pgnPagination;
+  @FXML
+  private ControllerPlayer playerController;
 
   private DownloadManager downloadManager;
   private SoundStorage soundStorage;
   private ObservableList<DownloadTask> downloadTasks;
-  private static final String TARGET_SAVE_FOLDER = "amuse_downloaded_songs";
+  private static final int ROWS_PER_PAGE = 20;
 
   @Override
   public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -51,13 +58,15 @@ public class ControllerMain implements Initializable {
     downloadTasks = createDownloadTasks(soundStorage);
     populateProgressColumns();
     addActionListeners();
+    pgnPagination.setPageFactory(this::createPage);
+    pgnPagination.setPageCount(downloadTasks.size() / ROWS_PER_PAGE);
   }
 
   private Path resolveSaveFolder() {
     final File targetSaveFolder = Paths.get(System.getProperty("user.dir"), TARGET_SAVE_FOLDER).toFile();
-    boolean exists = targetSaveFolder.exists();
+    final boolean exists = targetSaveFolder.exists();
     if (!exists) {
-      boolean folderCreated = targetSaveFolder.mkdir();
+      final boolean folderCreated = targetSaveFolder.mkdir();
       if (folderCreated) {
         System.out.println("Save folder does not existed. Created new one at: " + targetSaveFolder.getAbsolutePath());
       }
@@ -65,10 +74,21 @@ public class ControllerMain implements Initializable {
     return targetSaveFolder.toPath();
   }
 
+  private Node createPage(final int pageIndex) {
+    final int from = pageIndex * ROWS_PER_PAGE;
+    final int to = Math.min(from + ROWS_PER_PAGE, downloadTasks.size());
+    twSongsList.setItems(FXCollections.observableList(downloadTasks.subList(from, to)));
+    return new BorderPane(twSongsList);
+  }
+
   private ObservableList<DownloadTask> createDownloadTasks(SoundStorage storage) {
     final ObservableList<DownloadTask> downloadTasks = twSongsList.getItems();
     final Path saveFolder = resolveSaveFolder();
-    downloadTasks.addAll(storage.getSongs().stream().map(song -> new DownloadTask(song, saveFolder)).collect(Collectors.toList()));
+    final List<DownloadTask> tasks = storage.getSongs()
+            .stream()
+            .map(song -> new DownloadTask(song, saveFolder))
+            .collect(Collectors.toList());
+    downloadTasks.addAll(tasks);
     return downloadTasks;
   }
 
@@ -97,10 +117,10 @@ public class ControllerMain implements Initializable {
 
   private void addActionListeners() {
     btnDownloadSelected.setOnAction(actionEvent -> {
-        for (Integer index : twSongsList.getSelectionModel().getSelectedIndices()) {
-          downloadManager.performDownload(downloadTasks.get(index));
-        }
-      }
+              for (Integer index : twSongsList.getSelectionModel().getSelectedIndices()) {
+                downloadManager.performDownload(downloadTasks.get(index));
+              }
+            }
     );
 
     btnDownloadAll.setOnAction(actionEvent -> {
@@ -117,7 +137,7 @@ public class ControllerMain implements Initializable {
 
     twSongsList.getSelectionModel().selectedItemProperty().addListener((observableValue, task, task2) -> {
       if (task2 != null) {
-        playerController.setSong(task2.getSong());
+        playerController.chooseSong(task2.getSong());
         lblSongName.setText(task2.getArtist() + " :: " + task2.getName());
       }
     });
